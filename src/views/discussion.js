@@ -1,68 +1,99 @@
 /** @jsx jsx */
 import React from "react";
 import { jsx } from "@emotion/core";
-import Comment from "../components/comment";
 
-function Discussion({ id, discussions }) {
-  const discussion = discussions[id];
+function Discussion({ comments, id, user, setComments }) {
+  const commentStyle = {
+    border: "1px solid red",
+    paddingLeft: "8px"
+  };
 
-  return (
-    <div>
-      <main>
-        <h1>{discussion.title}</h1>
-        <div>
-          <span>By {discussion.author}</span>
-          <br />
-          <time>Publish {discussion.date}</time>
-        </div>
-        <p>{discussion.body}</p>
-        <label htmlFor="comment">Comment</label>
-        <br />
-        <textarea id="comment" placeholder="What are your thoughts?" />
-      </main>
-      <article>
-        <Comment
-          name={"Dexter Gutierres"}
-          date={"Thu Jun 13 2019 16:34:23"}
-          body={"Nice post"}
-        >
-          <Comment
-            name={"Dexter Gutierres"}
-            date={"Thu Jun 13 2019 16:34:23"}
-            body={"Nice post"}
-          >
-            <Comment
-              name={"Dexter Gutierres"}
-              date={"Thu Jun 13 2019 16:34:23"}
-              body={"Nice post"}
-            />
-          </Comment>
-        </Comment>
-        <Comment
-          name={"Dexter Gutierres"}
-          date={"Thu Jun 13 2019 16:34:23"}
-          body={"Nice post"}
-        >
-          <Comment
-            name={"Dexter Gutierres"}
-            date={"Thu Jun 13 2019 16:34:23"}
-            body={"Nice post"}
-          />
-        </Comment>
-        <Comment
-          name={"Dexter Gutierres"}
-          date={"Thu Jun 13 2019 16:34:23"}
-          body={"Nice post"}
-        >
-          <Comment
-            name={"Dexter Gutierres"}
-            date={"Thu Jun 13 2019 16:34:23"}
-            body={"Nice post"}
-          />
-        </Comment>
-      </article>
-    </div>
-  );
+  const discussionStyle = {
+    border: "1px solid blue"
+  };
+
+  const [commentContent, setCommentContent] = React.useState("");
+
+  function handleChangeComment(event) {
+    setCommentContent(event.target.value);
+  }
+
+  function addComment(newComment, idParent) {
+    const currentComments = { ...comments };
+    currentComments[idParent]["comments"].push(newComment.id);
+    const updateComments = {
+      ...currentComments,
+      [newComment.id]: newComment
+    };
+    setComments(updateComments);
+    localStorage.setItem("comments", JSON.stringify(updateComments));
+  }
+
+  function handleNewComment(event) {
+    event.preventDefault();
+    const currentId = event.target.dataset.id;
+    const newId = Date.now();
+    const newComment = {
+      id: newId,
+      parent: currentId,
+      body: commentContent,
+      author: user.username,
+      date: newId,
+      comments: []
+    };
+    addComment(newComment, currentId);
+  }
+
+  function renderChildren(idComment) {
+    let currentComment = comments[idComment];
+
+    return (
+      <>
+        {currentComment.parent ? (
+          <>
+            <div key={idComment} css={commentStyle}>
+              <span>{comments[idComment]["body"]}</span>
+              <form onSubmit={handleNewComment} data-id={idComment}>
+                <textarea
+                  placeholder="What are your thoughts?"
+                  name="new-comment"
+                  onChange={handleChangeComment}
+                />
+                <button>Create comment</button>
+              </form>
+              {comments[idComment]["comments"].map(currenId => {
+                return renderChildren(currenId);
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <div key={idComment} css={discussionStyle}>
+              <h1>{currentComment.title}</h1>
+              <div>
+                <span>By {currentComment.author} | </span>
+                <span>date: {currentComment.date}</span>
+              </div>
+              <p>{currentComment.body}</p>
+              <form onSubmit={handleNewComment} data-id={idComment}>
+                <textarea
+                  placeholder="What are your thoughts?"
+                  name="new-comment"
+                  onChange={handleChangeComment}
+                />
+                <button>Create comment</button>
+              </form>
+              {comments[idComment]["comments"].map(currenId => {
+                return renderChildren(currenId);
+              })}
+            </div>
+          </>
+        )}
+      </>
+    );
+  }
+
+  return <article>{renderChildren(id)}</article>;
 }
 
 export default Discussion;
