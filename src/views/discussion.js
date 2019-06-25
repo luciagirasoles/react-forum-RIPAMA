@@ -2,7 +2,7 @@
 import React from "react";
 import { jsx } from "@emotion/core";
 
-function Discussion({ comments, id, user, setComments }) {
+function Discussion({ comments, id, user, setComments, title }) {
   const commentStyle = {
     border: "1px solid red",
     paddingLeft: "8px"
@@ -41,6 +41,8 @@ function Discussion({ comments, id, user, setComments }) {
       date: newId,
       comments: []
     };
+    event.target.querySelector("input").value = "";
+    event.target.querySelector("input").focus();
     addComment(newComment, currentId);
   }
 
@@ -54,8 +56,8 @@ function Discussion({ comments, id, user, setComments }) {
             <div key={idComment} css={commentStyle}>
               <span>{comments[idComment]["body"]}</span>
               <form onSubmit={handleNewComment} data-id={idComment}>
-                <textarea
-                  placeholder="What are your thoughts?"
+                <input
+                  placeholder="Write a comment"
                   name="new-comment"
                   onChange={handleChangeComment}
                 />
@@ -69,15 +71,15 @@ function Discussion({ comments, id, user, setComments }) {
         ) : (
           <>
             <div key={idComment} css={discussionStyle}>
-              <h1>{currentComment.title}</h1>
+              <h1>{title}</h1>
               <div>
                 <span>By {currentComment.author} | </span>
                 <span>date: {currentComment.date}</span>
               </div>
               <p>{currentComment.body}</p>
               <form onSubmit={handleNewComment} data-id={idComment}>
-                <textarea
-                  placeholder="What are your thoughts?"
+                <input
+                  placeholder="Write a comment"
                   name="new-comment"
                   onChange={handleChangeComment}
                 />
