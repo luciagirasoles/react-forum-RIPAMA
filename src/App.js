@@ -12,12 +12,13 @@ function App() {
   const [user, setUser] = React.useState(
     JSON.parse(localStorage.getItem("user")) || { username: "", email: "" }
   );
+
   const [discussions, setDiscussions] = React.useState(
     JSON.parse(localStorage.getItem("discussions")) || {}
   );
 
   const [comments, setComments] = React.useState(
-    JSON.parse(localStorage.getItem("comments")) || []
+    JSON.parse(localStorage.getItem("comments")) || {}
   );
 
   function handleUser(value) {
@@ -26,7 +27,11 @@ function App() {
   }
 
   React.useEffect(() => {
-    localStorage.setItem("messages", JSON.stringify(comments));
+    localStorage.setItem("discussions", JSON.stringify(discussions));
+  }, [discussions]);
+
+  React.useEffect(() => {
+    localStorage.setItem("comments", JSON.stringify(comments));
   }, [comments]);
 
   return (
@@ -35,12 +40,19 @@ function App() {
       <Router>
         <Login onUser={handleUser} path="/" />
         <DiscussionList path="/discussions" discussions={discussions} />
-        <Discussion path="/discussions/:id" discussions={discussions} />
+        <Discussion
+          setComments={setComments}
+          user={user}
+          comments={comments}
+          path="/discussions/:id"
+        />
         <NewDiscussion
           path="/new"
           discussions={discussions}
           setDiscussions={setDiscussions}
           author={user.username}
+          comments={comments}
+          setComments={setComments}
         />
         <NotFound default />
       </Router>
