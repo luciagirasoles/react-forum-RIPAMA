@@ -41,6 +41,8 @@ function Discussion({ comments, id, user, setComments, title }) {
       date: newId,
       comments: []
     };
+    event.target.querySelector("input").value = "";
+    event.target.querySelector("input").focus();
     addComment(newComment, currentId);
   }
 
