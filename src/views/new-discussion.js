@@ -18,7 +18,7 @@ function NewDiscussion({
     event.preventDefault();
     const dateNow = Date.now();
     const newDiscussion = {
-      title,
+      title: title,
       author: author,
       id: dateNow
     };
@@ -104,6 +104,6 @@ function NewDiscussion({
       </div>
     );
   }
-  return <Redirect to={`/discussions/${newId}`} noThrow />;
+  return <Redirect to={`/discussions/${newId}/${title}`} noThrow />;
 }
 export default NewDiscussion;

@@ -9,7 +9,7 @@ function DiscussionList({ discussions }) {
         {Object.values(discussions).map(discussion => (
           <article key={discussion.id}>
             <hr />
-            <Link to={`/discussions/${discussion.id}`}>
+            <Link to={`/discussions/${discussion.id}/${discussion.title}`}>
               <h2>{discussion.title}</h2>
             </Link>
             <span>{discussion.author}</span>

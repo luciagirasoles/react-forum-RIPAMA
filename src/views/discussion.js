@@ -2,7 +2,7 @@
 import React from "react";
 import { jsx } from "@emotion/core";
 
-function Discussion({ comments, id, user, setComments }) {
+function Discussion({ comments, id, user, setComments, title }) {
   const commentStyle = {
     border: "1px solid red",
     paddingLeft: "8px"
@@ -69,7 +69,7 @@ function Discussion({ comments, id, user, setComments }) {
         ) : (
           <>
             <div key={idComment} css={discussionStyle}>
-              <h1>{currentComment.title}</h1>
+              <h1>{title}</h1>
               <div>
                 <span>By {currentComment.author} | </span>
                 <span>date: {currentComment.date}</span>

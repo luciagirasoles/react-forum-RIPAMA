@@ -44,7 +44,7 @@ function App() {
           setComments={setComments}
           user={user}
           comments={comments}
-          path="/discussions/:id"
+          path="/discussions/:id/:title"
         />
         <NewDiscussion
           path="/new"
