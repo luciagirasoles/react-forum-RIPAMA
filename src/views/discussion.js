@@ -54,8 +54,8 @@ function Discussion({ comments, id, user, setComments, title }) {
             <div key={idComment} css={commentStyle}>
               <span>{comments[idComment]["body"]}</span>
               <form onSubmit={handleNewComment} data-id={idComment}>
-                <textarea
-                  placeholder="What are your thoughts?"
+                <input
+                  placeholder="Write a comment"
                   name="new-comment"
                   onChange={handleChangeComment}
                 />
@@ -76,8 +76,8 @@ function Discussion({ comments, id, user, setComments, title }) {
               </div>
               <p>{currentComment.body}</p>
               <form onSubmit={handleNewComment} data-id={idComment}>
-                <textarea
-                  placeholder="What are your thoughts?"
+                <input
+                  placeholder="Write a comment"
                   name="new-comment"
                   onChange={handleChangeComment}
                 />
